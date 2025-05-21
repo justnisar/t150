@@ -7,7 +7,7 @@ public class MinimumNumberOfArrowsToBurstBalloons {
 
     public int findMinArrowShots(int[][] points) {
 
-        Arrays.sort(points, (int[] a, int[] b) -> a[1] - b[1]);
+        Arrays.sort(points, (int[] a, int[] b) -> Integer.compare(a[1],b[1]));
         int result = 1;
         int end = points[0][1];
         for(int i = 1 ; i < points.length ; i++){
@@ -23,7 +23,7 @@ public class MinimumNumberOfArrowsToBurstBalloons {
     }
 
     public static void main(String[] args) {
-        int[][] array = {{10,16},{2,8},{1,6},{7,12}};
+        int[][] array = {{-2147483646,-2147483645},{2147483646,2147483647}};
         new MinimumNumberOfArrowsToBurstBalloons().findMinArrowShots(array);
     }
 

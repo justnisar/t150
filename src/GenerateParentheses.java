@@ -5,11 +5,22 @@ public class GenerateParentheses {
 
     private void recFun(List<String> result, int openCount, int closedCount, int totalCount, String temp){
 
-        if(openCount == totalCount){
-            result.add(new String(temp));
+        if(temp.length() == 2 * totalCount){
+            result.add(temp);
             return;
         }
 
+        if(openCount < totalCount){
+            temp += '(';
+            recFun(result, openCount + 1, closedCount, totalCount, temp);
+            temp = temp.substring(0, temp.length() - 1);
+        }
+
+        if(openCount > closedCount){
+            temp += ')';
+            recFun(result, openCount, closedCount + 1, totalCount, temp);
+            temp = temp.substring(0, temp.length() - 1);
+        }
 
     }
 
