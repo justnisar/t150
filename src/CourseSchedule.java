@@ -1,89 +1,55 @@
 package src;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class CourseSchedule {
 
-    /*
-    private boolean[][] buildGraph(int numCourses, int[][] prerequisites){
-        boolean[][] graph = new boolean[numCourses][numCourses];
+    private List<List<Integer>> buildGraph(int numCourses, int[][] prerequisites){
+        List<List<Integer>> graph = new ArrayList<>();
+        for(int i = 0 ; i < numCourses ; i++){
+            graph.add(new ArrayList<>());
+        }
         for(int[] prerequisite : prerequisites){
-            graph[prerequisite[1]][prerequisite[0]] = true;
+            int x = prerequisite[0];
+            int y = prerequisite[1];
+            graph.get(y).add(x);
         }
         return graph;
     }
 
-    private boolean hasCycle(boolean[] visited, int start, boolean[][] graph){
-        visited[start] = true;
-        for(int i = 0 ; i < graph.length; i++){
-            if(graph[start][i]){
-                if(visited[i]){
-                    return true;
-                }
-                if(hasCycle(visited, i , graph)){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public boolean canFinish(int numCourses, int[][] prerequisites) {
-
-        boolean[][] graph = buildGraph(numCourses, prerequisites);
-        for(int i = 0 ; i < numCourses ; i++){
-            boolean[] visited = new boolean[graph.length];
-            if(hasCycle(visited, i, graph)){
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-     */
-
-    public boolean checkCycle(ArrayList<ArrayList<Integer>> graph, boolean[] visited, int course){
-
-        if(visited[course] == true)
+    private boolean dfs(int start, List<List<Integer>> graph, Set<Integer> visited, boolean[] track){
+        if(visited.contains(start)){
             return false;
-        else
-            visited[course] = true;
-        for(int i = 0 ; i < graph.get(course).size() ; i++){
-            if(!checkCycle(graph,visited,graph.get(course).get(i)))
-                return false;
         }
-        visited[course] = false;
-        return true;
+        if(track[start]){
+            return true;
+        }
+        visited.add(start);
+        track[start] = true;
+        boolean result = true;
+        for(int i : graph.get(start)){
+            if(dfs(i, graph, visited, track) == false){
+                return false;
+            }
+        }
+        visited.remove(start);
+        return result;
     }
 
     public boolean canFinish(int numCourses, int[][] prerequisites) {
 
-        if(numCourses <= 1)
-            return true;
-
-        // Declare a graph. ArrayList of ArrayLists
-        ArrayList< ArrayList<Integer> > graph = new ArrayList<ArrayList<Integer> >(numCourses);
-        // boolean array to check if node of a graph is visited
-        boolean[] visited = new boolean[numCourses];
-
+        boolean[] track = new boolean[numCourses];
+        List<List<Integer>> graph = buildGraph(numCourses, prerequisites);
         for(int i = 0 ; i < numCourses ; i++){
-            graph.add(new ArrayList<Integer>());
-        }
-        for(int i = 0 ; i < prerequisites.length ; i++){
-            int destination = prerequisites[i][0];
-            int source = prerequisites[i][1];
-            graph.get(source).add(destination);
-        }
-        for(int i = 0 ; i < numCourses ; i++){
-            if(!checkCycle(graph,visited,i))
+            if(dfs(i, graph, new HashSet<Integer>(), track) == false){
                 return false;
+            }
         }
         return true;
     }
 
     public static void main(String[] args) {
-        int[][] prerequisites = {{1,0},{2,0},{0,2}};
-        System.out.println(new CourseSchedule().canFinish(3, prerequisites));
+        int[][] prerequisites = {{1,4},{2,4},{3,1},{3,1},{3,2}};
+        System.out.println(new CourseSchedule().canFinish(5, prerequisites));
     }
 }
