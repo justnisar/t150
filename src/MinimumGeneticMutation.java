@@ -1,9 +1,6 @@
 package src;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 public class MinimumGeneticMutation {
 
@@ -22,17 +19,37 @@ public class MinimumGeneticMutation {
 
     public int minMutation(String startGene, String endGene, String[] bank) {
 
-        Map<String, Integer> geneNodeMap = new HashMap<>();
-        int i = 1 ;
-        geneNodeMap.put(startGene, 0);
-        for(String gene : bank){
-            geneNodeMap.put(gene, i);
-            i++;
-        }
-        geneNodeMap.put(endGene, i);
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(0);
 
-        return 0;
+        Queue<String> queue = new LinkedList<>();
+        queue.add(startGene);
+
+        Set<String> visited = new HashSet<>();
+        visited.add(startGene);
+
+        int level = 0;
+
+        while(!queue.isEmpty()){
+
+            int levelSize = queue.size();
+
+            for(int i = 0 ; i < levelSize ; i++){
+                String current = queue.remove();
+                if(current.equals(endGene)){
+                    return level;
+                }
+
+                for(String node : bank){
+                    if(!visited.contains(node) && doesDifferByOneChar(current, node)){
+                        visited.add(node);
+                        queue.add(node);
+                    }
+                }
+
+            }
+            level++;
+
+        }
+
+        return -1;
     }
 }
