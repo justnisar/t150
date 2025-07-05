@@ -5,40 +5,35 @@ public class LongestPalindromicSubstring {
     public String longestPalindrome(String s) {
 
         boolean[][] dp = new boolean[s.length()][s.length()];
-        String result = null;
 
-        // for strings with length 1
-        for(int i = 0 ; i < s.length() ; i++) {
+        dp[0][0] = true;
+
+        String result = "";
+
+        // Strings of length 1 and 2
+        for(int i = 0 ; i < s.length(); i++){
             dp[i][i] = true;
-            result = s.substring(i, i + 1);
-        }
-
-        // for strings with length 2
-        for(int i = 0 ; i < s.length() - 1 ; i++) {
-            if(s.charAt(i) == s.charAt(i + 1)) {
-                result = s.substring(i, i + 2);
+            result = s.substring(i, i+1);
+            if(i+1 < s.length() && s.charAt(i) == s.charAt(i+1)){
                 dp[i][i+1] = true;
+                result = s.substring(i, i+2);
             }
         }
 
-        // for all other strings
-        for(int i = 2 ; i < s.length() ; i++ ){
-
-            for(int j = 0 ; j + i < s.length() ; j++){
-
-                if(s.charAt(j) == s.charAt(j + i) && dp[j+1][j+i-1]){
-                    result = s.substring(j, j + i + 1);
-                    dp[j][j+i] = true;
+        // Strings of length 3 and more
+        for(int k = 2; k < s.length(); k++){
+            for(int i = 0 ; i + k < s.length() ; i++){
+                if(s.charAt(i) == s.charAt(i + k) && dp[i+1][i+k-1]){
+                    dp[i][i+k] = true;
+                    String str = s.substring(i, i+k);
                 }
-
             }
-
         }
-
         return result;
+
     }
 
     public static void main(String[] args) {
-        new LongestPalindromicSubstring().longestPalindrome("babad");
+        new LongestPalindromicSubstring().longestPalindrome("ccc");
     }
 }

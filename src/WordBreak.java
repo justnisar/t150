@@ -9,22 +9,22 @@ public class WordBreak {
     public boolean wordBreak(String s, List<String> wordDict) {
 
         Set<String> set = new HashSet<>(wordDict);
-        // start building for each length
-        boolean[] table = new boolean[s.length() + 1];
-        // string of length 0 is always true, empty string
-        table[0] = true;
+        boolean[] dp = new boolean[s.length() + 1];
+        dp[0] = true;
 
-        // Compute for length of 1 to length of no. of chars in s
         for(int i = 1 ; i < s.length() + 1 ; i++){
-            for(int j = 0 ; j <= i ; j++){
-                String right = s.substring(j, i);
-                if(table[j] && set.contains(right)){
-                    table[i] = true;
+
+            for(int j = 0 ; j < i ; j++){
+                String str = s.substring(j,i);
+                if(dp[j] && set.contains(str)){
+                    dp[i] = true;
                     break;
                 }
             }
         }
-        return table[s.length()];
+
+        return dp[s.length()];
+
     }
 
     public static void main(String[] args) {
