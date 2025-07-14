@@ -8,6 +8,7 @@ import java.util.Set;
 
 public class ValidSudoku {
 
+    /*
     private boolean doDuplicatesExist(List<Character> list){
         Set<Character> set = new HashSet<>();
         for(char ch: list){
@@ -75,6 +76,30 @@ public class ValidSudoku {
 
     public boolean isValidSudoku(char[][] board) {
         return rowCheck(board) && columnCheck(board) && boxCheck(board);
+    }
+*/
+
+    public boolean isValidSudoku(char[][] board) {
+        for(int i = 0 ; i < 9 ; i++){
+            Set<Character> rowSet = new HashSet<>();
+            Set<Character> columnSet = new HashSet<>();
+            Set<Character> boxSet = new HashSet<>();
+            for(int j = 0 ; j < 9 ; j++){
+                if(board[i][j] != '.' && !rowSet.add(board[i][j])){
+                    return false;
+                }
+                if(board[j][i] != '.' && !columnSet.add(board[j][i])){
+                    return false;
+                }
+
+                int boxX = i/3 * 3 + j/3;
+                int boxY = i%3 * 3 + j%3;
+                if(board[boxX][boxY] != '.' && !boxSet.add(board[boxX][boxY])){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public static void main(String[] args) {
