@@ -30,11 +30,12 @@ public class BasicCalculator {
                 stack.add(result);
                 stack.add(sign);
                 result = 0;
+                sign = 1;
             }
             else if(ch == ')'){
                 int prevSign = stack.pop();
                 int prevResult = stack.pop();
-                result = result + prevResult * prevSign;
+                result = prevResult + prevSign * result;
             }
         }
 
